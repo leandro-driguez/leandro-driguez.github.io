@@ -1,6 +1,3 @@
-# lead8000.github.io
+# My Website
 
-## Hello world!
-
-- [ ] activate Github Pages
-- [X] write a better presentation in my website with pure HTML
+In this repository, I will share my personal website with you and progressively update it.
