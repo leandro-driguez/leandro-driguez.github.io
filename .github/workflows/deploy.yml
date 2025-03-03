@@ -20,20 +20,21 @@ jobs:
         with:
           node-version: "18"
           cache: 'npm'
+          cache-dependency-path: './leandrodriguez.me/package-lock.json'
           
       - name: Install Dependencies
-        run: npm ci
+        run: cd leandrodriguez.me && npm ci
         
       - name: Build
-        run: npm run build
+        run: cd leandrodriguez.me && npm run build
         
       - name: Deploy to GitHub Pages
         run: |
           # Save .git directory
-          mv .git ./dist/
+          mv .git ./leandrodriguez.me/dist/
           
-          # Get all tracked files
-          TRACKED_FILES=$(git ls-tree --name-only HEAD | grep -v "dist" | grep -v ".github")
+          # Get all tracked files in the root (except the app directory and .github)
+          TRACKED_FILES=$(git ls-tree --name-only HEAD | grep -v "leandrodriguez.me" | grep -v ".github")
           
           # Remove tracked files except .github directory
           for file in $TRACKED_FILES; do
@@ -41,8 +42,11 @@ jobs:
           done
           
           # Move built files to root
-          mv dist/* ./
-          rmdir dist
+          mv leandrodriguez.me/dist/* ./
+          
+          # Clean up
+          rm -rf leandrodriguez.me
+          rmdir dist || true
           
           # Configure git
           git config --global user.name 'GitHub Actions'
