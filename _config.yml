@@ -1,0 +1,48 @@
+title: "My Blog"
+description: "A personal blog, written in Notion."
+url: "https://leandro-driguez.github.io" # e.g. https://username.github.io
+baseurl: "" # e.g. /repo-name (leave empty if using username.github.io)
+
+author:
+  name: "Leandro Rodriguez"
+  email: "leandro_driguez@outlook.com"
+
+# ── Build settings ────────────────────────────────────────────────────────────
+markdown: kramdown
+highlighter: rouge
+permalink: /:year/:month/:day/:slug/
+timezone: UTC
+
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: "highlight"
+
+# ── Plugins (all supported by GitHub Pages) ───────────────────────────────────
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# ── Feed ──────────────────────────────────────────────────────────────────────
+feed:
+  posts_limit: 20
+
+# ── SEO defaults ──────────────────────────────────────────────────────────────
+twitter:
+  username: yourhandle # optional
+
+# ── Exclude from build ────────────────────────────────────────────────────────
+exclude:
+  - scripts/
+  - node_modules/
+  - package.json
+  - package-lock.json
+  - "*.sh"
+  - Gemfile
+  - Gemfile.lock
+  - .env
+  - .env.*
+  - vendor/

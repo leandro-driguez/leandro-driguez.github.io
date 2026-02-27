@@ -1,0 +1,15 @@
+{
+  "name": "notion-jekyll-sync",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Syncs published posts from a Notion database into Jekyll _posts/",
+  "scripts": {
+    "sync": "node scripts/sync-notion.js"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.15"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
