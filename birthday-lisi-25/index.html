@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Para Lisi 🌸</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1a0a2e 0%, #2d1250 40%, #1a0a2e 100%);
+        font-family: 'Quicksand', sans-serif;
+        overflow: hidden;
+      }
+
+      /* floating hearts background */
+      .hearts {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .heart {
+        position: absolute;
+        bottom: -60px;
+        font-size: 1.4rem;
+        opacity: 0;
+        animation: floatUp linear infinite;
+      }
+      @keyframes floatUp {
+        0%   { transform: translateY(0) scale(0.8) rotate(-10deg); opacity: 0; }
+        10%  { opacity: 0.6; }
+        90%  { opacity: 0.3; }
+        100% { transform: translateY(-110vh) scale(1.1) rotate(10deg); opacity: 0; }
+      }
+
+      .card {
+        position: relative;
+        z-index: 1;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 180, 210, 0.2);
+        border-radius: 24px;
+        padding: 48px 40px;
+        max-width: 440px;
+        width: 90%;
+        text-align: center;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 0 60px rgba(200, 80, 160, 0.15);
+      }
+
+      .emoji-top {
+        font-size: 2.4rem;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      h1 {
+        color: #f9c6e0;
+        font-size: 1.7rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        letter-spacing: 0.02em;
+      }
+
+      .subtitle {
+        color: rgba(249, 198, 224, 0.6);
+        font-size: 0.9rem;
+        font-weight: 400;
+        margin-bottom: 36px;
+        line-height: 1.5;
+      }
+
+      .words-form {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-bottom: 28px;
+      }
+
+      .input-wrap {
+        position: relative;
+      }
+
+      .input-wrap label {
+        position: absolute;
+        top: -9px;
+        left: 14px;
+        background: #2d1250;
+        color: rgba(249, 198, 224, 0.55);
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 0 6px;
+        border-radius: 4px;
+      }
+
+      .input-wrap input {
+        width: 100%;
+        padding: 14px 18px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 180, 210, 0.25);
+        border-radius: 12px;
+        color: #f9c6e0;
+        font-family: 'Quicksand', sans-serif;
+        font-size: 1.05rem;
+        font-weight: 500;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        text-align: center;
+        letter-spacing: 0.05em;
+      }
+
+      .input-wrap input::placeholder {
+        color: rgba(249, 198, 224, 0.2);
+        letter-spacing: 0.12em;
+      }
+
+      .input-wrap input:focus {
+        border-color: rgba(255, 140, 200, 0.6);
+        box-shadow: 0 0 18px rgba(200, 80, 160, 0.2);
+      }
+
+      button[type="submit"] {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #c850a0, #9b3ab8);
+        border: none;
+        border-radius: 12px;
+        color: #fff;
+        font-family: 'Quicksand', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        cursor: pointer;
+        transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+        box-shadow: 0 4px 20px rgba(200, 80, 160, 0.35);
+      }
+
+      button[type="submit"]:hover {
+        opacity: 0.92;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 28px rgba(200, 80, 160, 0.5);
+      }
+
+      button[type="submit"]:active {
+        transform: translateY(0);
+      }
+
+      #hint {
+        margin-top: 16px;
+        font-size: 0.82rem;
+        color: rgba(249, 198, 224, 0.45);
+        min-height: 20px;
+        transition: color 0.3s;
+      }
+      #hint.error {
+        color: #ff7eb3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hearts" id="heartsContainer"></div>
+
+    <div class="card">
+      <span class="emoji-top">🌸</span>
+      <h1>Para Lisi</h1>
+      <p class="subtitle">Hay algo escondido en este sitio.<br>Encuentra las 3 palabras mágicas.</p>
+
+      <form class="words-form" id="wordsForm" autocomplete="off">
+        <div class="input-wrap">
+          <label>Palabra 1</label>
+          <input id="w1" type="text" placeholder="···" spellcheck="false" />
+        </div>
+        <div class="input-wrap">
+          <label>Palabra 2</label>
+          <input id="w2" type="text" placeholder="···" spellcheck="false" />
+        </div>
+        <div class="input-wrap">
+          <label>Palabra 3</label>
+          <input id="w3" type="text" placeholder="···" spellcheck="false" />
+        </div>
+        <button type="submit">Descubrir ✨</button>
+      </form>
+
+      <p id="hint"></p>
+    </div>
+
+    <script>
+      // --- floating hearts ---
+      const container = document.getElementById('heartsContainer');
+      const symbols = ['♥', '💜', '🌸', '✨', '♡'];
+      for (let i = 0; i < 18; i++) {
+        const el = document.createElement('span');
+        el.className = 'heart';
+        el.textContent = symbols[i % symbols.length];
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+        el.style.animationDuration = (8 + Math.random() * 12) + 's';
+        el.style.animationDelay = (Math.random() * 15) + 's';
+        container.appendChild(el);
+      }
+
+      // --- base58 encode ---
+      const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+      function base58Encode(bytes) {
+        let n = BigInt('0x' + Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join(''));
+        let result = '';
+        while (n > 0n) {
+          const rem = Number(n % 58n);
+          n = n / 58n;
+          result = BASE58[rem] + result;
+        }
+        for (const byte of bytes) {
+          if (byte !== 0) break;
+          result = BASE58[0] + result;
+        }
+        return result;
+      }
+
+      // --- form submit ---
+      document.getElementById('wordsForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const hint = document.getElementById('hint');
+
+        const w1 = document.getElementById('w1').value.trim().toLowerCase();
+        const w2 = document.getElementById('w2').value.trim().toLowerCase();
+        const w3 = document.getElementById('w3').value.trim().toLowerCase();
+
+        if (!w1 || !w2 || !w3) {
+          hint.textContent = 'Escribe las 3 palabras primero.';
+          hint.className = 'error';
+          return;
+        }
+
+        hint.textContent = '';
+        hint.className = '';
+
+        const text = `${w1} ${w2} ${w3}`;
+        const encoded = new TextEncoder().encode(text);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', encoded);
+        const hashBytes = new Uint8Array(hashBuffer);
+        const path = base58Encode(hashBytes);
+
+        window.location.href = `/birthday-lisi-25/${path}`;
+      });
+    </script>
+  </body>
+</html>
