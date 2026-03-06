@@ -35,23 +35,26 @@ jobs:
         run: npm install
 
       # ── 4. Run sync ────────────────────────────────────────────────────────
-      - name: Sync posts from Notion
+      - name: Sync from Notion
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_PAGES_DATABASE_ID: ${{ secrets.NOTION_PAGES_DATABASE_ID }}
+          NOTION_POSTS_DATABASE_ID: ${{ secrets.NOTION_POSTS_DATABASE_ID }}
+          # Legacy fallback — kept for repos that only have a posts database
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
         run: node scripts/sync-notion.js
 
-      # ── 5. Commit changes (only if _posts/ was modified) ──────────────────
+      # ── 5. Commit changes ─────────────────────────────────────────────────
       - name: Commit and push changes
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name  "github-actions[bot]"
 
-          git add _posts/
+          git add _posts/ _pages/ _data/
 
           # Exit gracefully if nothing changed
           if git diff --staged --quiet; then
-            echo "Nothing to commit — posts are already up to date."
+            echo "Nothing to commit — site is already up to date."
             exit 0
           fi
 

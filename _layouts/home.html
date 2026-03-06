@@ -1,22 +1,64 @@
 ---
 layout: default
 ---
+{% assign home = site.data.home %}
+
 <div class="container">
-  {% if site.description %}
-  <div class="home-header">
-    <p class="home-description">{{ site.description }}</p>
+  <section class="home-hero">
+
+    {% if home.profile_picture and home.profile_picture != "" %}
+    <img
+      src="{{ home.profile_picture }}"
+      alt="{{ home.name }}"
+      class="home-avatar"
+      loading="eager"
+    >
+    {% else %}
+    <div class="home-avatar-placeholder" aria-hidden="true">
+      {{ home.name | slice: 0 | upcase }}
+    </div>
+    {% endif %}
+
+    <h1 class="home-name">{{ home.name | default: site.author.name | default: site.title }}</h1>
+
+    {% if home.tagline and home.tagline != "" %}
+    <p class="home-tagline">{{ home.tagline }}</p>
+    {% endif %}
+
+    {% if home.social_links and home.social_links.size > 0 %}
+    <nav class="home-social" aria-label="Social links">
+      {% for link in home.social_links %}
+      <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.name }}</a>
+      {% unless forloop.last %}<span class="home-social-sep" aria-hidden="true">/</span>{% endunless %}
+      {% endfor %}
+    </nav>
+    {% endif %}
+
+  </section>
+
+  {% if home.bio and home.bio != "" %}
+  <div class="home-bio">
+    {{ home.bio | markdownify }}
   </div>
   {% endif %}
 
-  <div class="posts-list">
-    {% if site.posts.size == 0 %}
-    <div class="empty-state">
-      <p>No posts yet. Publish posts in your Notion database to get started.</p>
+  {% if site.posts.size > 0 %}
+  <section class="home-posts">
+    <div class="home-posts-header">
+      <span class="home-posts-label">Writing</span>
+      <a href="{{ '/blog' | relative_url }}" class="home-posts-more">All posts →</a>
     </div>
-    {% else %}
-    {% for post in site.posts %}
-      {% include post-card.html post=post %}
-    {% endfor %}
-    {% endif %}
-  </div>
+
+    <div class="home-posts-list">
+      {% for post in site.posts limit: 5 %}
+      <a href="{{ post.url | relative_url }}" class="home-post-row">
+        <span class="home-post-title">{{ post.title }}</span>
+        <time class="home-post-date" datetime="{{ post.date | date_to_xmlschema }}">
+          {{ post.date | date: "%b %Y" }}
+        </time>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
 </div>

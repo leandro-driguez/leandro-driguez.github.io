@@ -1,11 +1,11 @@
-title: "My Blog"
-description: "A personal blog, written in Notion."
-url: "https://leandro-driguez.github.io" # e.g. https://username.github.io
+title: "Your Name"
+description: "A personal site & blog, written in Notion."
+url: "https://username.github.io" # e.g. https://username.github.io
 baseurl: "" # e.g. /repo-name (leave empty if using username.github.io)
 
 author:
-  name: "Leandro Rodriguez"
-  email: "leandro_driguez@outlook.com"
+  name: "Your Name"
+  email: "you@example.com"
 
 # ── Build settings ────────────────────────────────────────────────────────────
 markdown: kramdown
@@ -20,6 +20,19 @@ kramdown:
   syntax_highlighter_opts:
     css_class: "highlight"
 
+# ── Collections ───────────────────────────────────────────────────────────────
+collections:
+  pages:
+    output: true
+    permalink: /:slug/
+
+defaults:
+  - scope:
+      path: "_pages"
+      type: "pages"
+    values:
+      layout: "page"
+
 # ── Plugins (all supported by GitHub Pages) ───────────────────────────────────
 plugins:
   - jekyll-feed
@@ -32,7 +45,7 @@ feed:
 
 # ── SEO defaults ──────────────────────────────────────────────────────────────
 twitter:
-  username: yourhandle # optional
+  username: "" # optional
 
 # ── Exclude from build ────────────────────────────────────────────────────────
 exclude:
@@ -46,3 +59,5 @@ exclude:
   - .env
   - .env.*
   - vendor/
+  - leandrodriguez.me/
+  - prompt.txt

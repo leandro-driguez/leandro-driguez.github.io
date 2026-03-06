@@ -1,64 +1,85 @@
-# NotionGit Jekyll Blog
+# NotionGit — Personal Site & Blog
 
-A free, minimalist blog template that syncs automatically from **Notion** to **GitHub Pages**.
+A free, minimalist personal website template powered by **Notion** and **GitHub Pages**.
 
-Write posts in Notion → they appear on your site within ~10 minutes. No servers, no paid tools.
+Write everything in Notion — your home page, about, now page, blog posts, any section you want — and it appears on your site within ~10 minutes. No servers, no paid tools, no code required after setup.
 
 ---
 
 ## How it works
 
 ```
-Notion database  →  GitHub Action (cron)  →  _posts/*.md  →  Jekyll  →  GitHub Pages
+Notion databases  →  GitHub Action (cron)  →  Jekyll files  →  GitHub Pages
 ```
 
-1. A scheduled GitHub Action queries your Notion database every 10 minutes.
-2. Published posts are converted to Markdown and committed to `_posts/`.
-3. GitHub Pages rebuilds the Jekyll site automatically.
+Two Notion databases drive the entire site:
+
+| Database | Controls |
+|---|---|
+| **Pages** | Your home page, nav structure, and every site section (About, Now, Contact, etc.) |
+| **Posts** | Your blog posts |
+
+A scheduled GitHub Action queries both databases every 10 minutes, converts content to Markdown, and commits the files. GitHub Pages rebuilds automatically.
 
 ---
 
-## Setup (≈ 15 minutes)
+## Setup (≈ 20 minutes)
 
-### Step 1 — Duplicate the Notion template
+### Step 1 — Create two Notion databases
 
-1. Open the [Notion blog database template](#) *(duplicate this into your workspace)*.
-2. Make sure the database has these properties:
+Duplicate the Notion workspace template *(link)*, which gives you both databases pre-configured. Or create them manually with the schemas below.
 
-   | Property | Type | Notes |
-   |---|---|---|
-   | `Title` | Title | Post title |
-   | `Slug` | Text | URL-friendly identifier, e.g. `my-first-post` |
-   | `Status` | Select | Options: `Draft`, `Published` |
-   | `Publish Date` | Date | Date to display on the post |
-   | `Tags` | Multi-select | Optional but recommended |
-   | `Cover Image` | Files & media | Optional cover photo |
-   | `Description` | Text | Optional excerpt / meta description |
+**Pages database** — one row per section of your site:
+
+| Property | Type | Notes |
+|---|---|---|
+| `Title` | Title | Page name (also shown in nav) |
+| `Slug` | Text | URL path, e.g. `about`, `now`, `blog` |
+| `Type` | Select | `home`, `blog-list`, or `markdown` |
+| `Nav Order` | Number | Sort position in the navbar (1 = first) |
+| `Show in Nav` | Checkbox | Whether to appear in the header nav |
+| `Status` | Select | `Draft` or `Published` |
+| `Description` | Text | Optional meta description |
+| `Profile Picture` | Text | External image URL — home page only |
+| `Tagline` | Text | One-line bio — home page only |
+| `Social Links` | Text | One `Name: URL` per line — home page only |
+
+**Posts database** — one row per blog post:
+
+| Property | Type | Notes |
+|---|---|---|
+| `Title` | Title | Post title |
+| `Slug` | Text | URL identifier, e.g. `my-first-post` |
+| `Status` | Select | `Draft` or `Published` |
+| `Publish Date` | Date | Date shown on the post |
+| `Tags` | Multi-select | Optional |
+| `Cover Image` | Files & media | Use an **external URL** (Notion-hosted URLs expire) |
+| `Description` | Text | Optional excerpt / meta description |
 
 ### Step 2 — Create a Notion integration
 
 1. Go to [notion.so/my-integrations](https://www.notion.so/my-integrations).
-2. Click **+ New integration**, give it a name (e.g. *Blog Sync*), and select your workspace.
+2. Click **+ New integration**, give it a name (e.g. *Site Sync*), select your workspace.
 3. Copy the **Internal Integration Token** — you'll need it in Step 4.
-4. Back in Notion, open your blog database, click `···` → **Add connections**, and connect your integration.
+4. Back in Notion, open **each database**, click `···` → **Add connections**, and connect your integration.
 
 ### Step 3 — Use this GitHub template
 
 1. Click **"Use this template"** at the top of this repository.
-2. Give your repo a name (e.g. `my-blog` or `username.github.io`).
+2. Name your repo `username.github.io` (for a root site) or anything else.
 3. Clone or open the new repo.
 
 ### Step 4 — Add secrets to GitHub
 
-In your repo go to **Settings → Secrets and variables → Actions → New repository secret** and add:
+Go to **Settings → Secrets and variables → Actions → New repository secret** and add:
 
 | Secret name | Value |
 |---|---|
-| `NOTION_TOKEN` | Your Notion integration token from Step 2 |
-| `NOTION_DATABASE_ID` | The ID of your Notion database (see below) |
+| `NOTION_TOKEN` | Your integration token from Step 2 |
+| `NOTION_PAGES_DATABASE_ID` | ID of your Pages database |
+| `NOTION_POSTS_DATABASE_ID` | ID of your Posts database |
 
-**Finding your database ID:**
-Open the database in Notion and look at the URL:
+**Finding a database ID:** Open the database in Notion and look at the URL:
 ```
 https://www.notion.so/yourworkspace/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx?v=...
                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -67,20 +88,15 @@ https://www.notion.so/yourworkspace/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx?v=...
 
 ### Step 5 — Configure the site
 
-Edit `_config.yml` and update:
+Edit `_config.yml` and update at minimum:
 
 ```yaml
-title: "Your Blog Name"
-description: "A short description of your blog."
-url: "https://username.github.io"   # or your custom domain
-baseurl: ""                          # leave empty for username.github.io repos
-
+title: "Your Name"
+url: "https://username.github.io"
 author:
   name: "Your Name"
   email: "you@example.com"
 ```
-
-Also edit `about.md` to write your about page.
 
 ### Step 6 — Enable GitHub Pages
 
@@ -89,17 +105,53 @@ Also edit `about.md` to write your about page.
 3. Select branch `master` (or `main`) and folder `/ (root)`.
 4. Click **Save**.
 
-Your site will be live at `https://username.github.io` (or your custom domain) within a minute.
+### Step 7 — Set up your home page in Notion
 
-### Step 7 — Publish your first post
+In your Pages database, create a row with:
+- `Type` = `home`
+- `Status` = `Published`
+- `Profile Picture` = a URL to your photo (use an external host, not Notion upload)
+- `Tagline` = a one-line description of yourself
+- `Social Links` = one link per line in `Name: URL` format:
+  ```
+  GitHub: https://github.com/username
+  Twitter: https://twitter.com/handle
+  Email: mailto:you@example.com
+  ```
+- Write your longer bio/intro in the **page body** — it's rendered as Markdown below your tagline.
 
-1. Open your Notion database.
-2. Create a new row (post).
-3. Fill in `Title`, `Slug`, `Publish Date`, and any `Tags`.
-4. Write the post content in the page body.
-5. Set `Status` to **Published**.
-6. Wait up to 10 minutes for the sync to run, or trigger it manually:
-   - Go to **Actions → Sync Notion → Jekyll → Run workflow**.
+### Step 8 — Add site sections
+
+Create rows in the Pages database for each section you want. Common setup:
+
+| Title | Slug | Type | Nav Order | Show in Nav |
+|---|---|---|---|---|
+| About | `about` | `markdown` | 1 | ✓ |
+| Blog | `blog` | `blog-list` | 2 | ✓ |
+| Now | `now` | `markdown` | 3 | ✓ |
+| Contact | `contact` | `markdown` | 4 | ✓ |
+
+Write the content of each page in the Notion page body.
+
+### Step 9 — Publish your first post
+
+1. In your Posts database, create a new row.
+2. Fill in `Title`, `Slug`, and `Publish Date`.
+3. Write the post content in the page body.
+4. Set `Status` to **Published**.
+5. Wait up to 10 minutes, or trigger manually: **Actions → Sync Notion → Run workflow**.
+
+---
+
+## Page types
+
+| Type value | What it renders |
+|---|---|
+| `home` | Profile picture, name, tagline, social links, bio, recent posts. Always at `/`. |
+| `blog-list` | Chronological list of all blog posts. |
+| `markdown` | Clean content page — headings, text, code, images. Use for About, Now, Contact, etc. |
+
+More types (e.g. `photos`) can be added by creating a matching `_layouts/{type}.html` and handling the value in `typeToLayout()` in `scripts/sync-notion.js`.
 
 ---
 
@@ -114,7 +166,7 @@ Your site will be live at `https://username.github.io` (or your custom domain) w
 | To-do list | `- [ ] item` / `- [x] item` |
 | Code block | ` ```lang ``` ` with syntax highlighting |
 | Quote | `> blockquote` |
-| Callout | `> 💡 callout text` |
+| Callout | `> emoji callout text` |
 | Divider | `---` |
 | Image | `![caption](url)` |
 | Video | Link |
@@ -128,25 +180,27 @@ Your site will be live at `https://username.github.io` (or your custom domain) w
 ### Site title, description, author
 Edit `_config.yml`.
 
-### About page
-Edit `about.md`.
+### Home page content
+Edit the `home` row in your Notion Pages database. No code changes needed.
 
 ### Navigation
-Edit `_includes/header.html` to add or change nav links.
+Add or reorder pages in the Notion Pages database. Anything with **Show in Nav** checked and a **Nav Order** appears in the header automatically.
 
-### Theme colours
-All design tokens (colours, fonts, spacing) are CSS custom properties at the top of `assets/css/main.css`. Override the `:root` block to change the look.
+### Theme colours and fonts
+All design tokens are CSS custom properties in the `:root` block at the top of `assets/css/main.css`. Change colours, fonts, and spacing there. Dark mode is handled automatically via `@media (prefers-color-scheme: dark)`.
 
 ### Custom domain
-1. Add a `CNAME` file to the repo root containing your domain (e.g. `blog.example.com`).
-2. Configure your DNS provider to point to GitHub Pages.
+1. Add a `CNAME` file to the repo root with your domain (e.g. `yourname.com`).
+2. Configure your DNS to point to GitHub Pages.
 3. Update `url:` in `_config.yml`.
 
 ---
 
-## Unpublishing a post
+## Unpublishing content
 
-Set the post's `Status` to `Draft` in Notion. On the next sync run, the file will be removed from `_posts/` and the page will disappear from the site.
+Set `Status` to `Draft` in Notion. On the next sync:
+- A **post** is removed from `_posts/` and disappears from the blog.
+- A **page** is removed from `_pages/` and its URL returns 404.
 
 ---
 
@@ -156,11 +210,14 @@ Set the post's `Status` to `Draft` in Notion. On the next sync run, the file wil
 # Install Ruby dependencies
 bundle install
 
-# Serve locally (hot-reload)
+# Serve locally with hot-reload
 bundle exec jekyll serve
 
-# Test the sync script locally
-NOTION_TOKEN=secret_xxx NOTION_DATABASE_ID=xxx node scripts/sync-notion.js
+# Run the sync script locally
+NOTION_TOKEN=secret_xxx \
+NOTION_PAGES_DATABASE_ID=xxx \
+NOTION_POSTS_DATABASE_ID=xxx \
+node scripts/sync-notion.js
 ```
 
 ---
@@ -168,26 +225,29 @@ NOTION_TOKEN=secret_xxx NOTION_DATABASE_ID=xxx node scripts/sync-notion.js
 ## Repository structure
 
 ```
-├── _posts/               ← generated by sync (do not edit manually)
+├── _posts/                   ← generated by sync (do not edit manually)
+├── _pages/                   ← generated by sync (do not edit manually)
+├── _data/
+│   ├── home.yml              ← generated: home page profile data
+│   └── nav.yml               ← generated: navigation items
 ├── _layouts/
-│   ├── default.html      ← base HTML shell
-│   ├── home.html         ← post list page
-│   ├── post.html         ← individual post
-│   └── page.html         ← static pages (About, etc.)
+│   ├── default.html          ← base HTML shell
+│   ├── home.html             ← profile + bio + recent posts
+│   ├── blog.html             ← chronological post list
+│   ├── post.html             ← individual blog post
+│   └── page.html             ← generic markdown content page
 ├── _includes/
-│   ├── head.html         ← <head> meta, CSS link
-│   ├── header.html       ← site nav
+│   ├── head.html             ← <head> meta + CSS
+│   ├── header.html           ← site nav (built from _data/nav.yml)
 │   ├── footer.html
-│   └── post-card.html    ← post preview on home page
-├── assets/css/main.css   ← full theme (≈ 500 lines, plain CSS)
+│   └── post-card.html        ← post preview card
+├── assets/css/main.css       ← full theme, plain CSS, dark-mode ready
 ├── scripts/
-│   └── sync-notion.js    ← Notion fetch + Markdown conversion
+│   └── sync-notion.js        ← Notion → Markdown conversion + file writing
 ├── .github/workflows/
-│   └── sync-notion.yml   ← scheduled GitHub Action
+│   └── sync-notion.yml       ← scheduled GitHub Action (every 10 min)
 ├── _config.yml
-├── index.html            ← home page (uses home layout)
-├── about.md
-└── tags.html
+└── index.html                ← home page entry point (layout: home)
 ```
 
 ---
@@ -195,19 +255,25 @@ NOTION_TOKEN=secret_xxx NOTION_DATABASE_ID=xxx node scripts/sync-notion.js
 ## FAQ
 
 **Q: How often does the sync run?**
-Every 10 minutes via a GitHub Actions cron schedule. You can also trigger it manually from the Actions tab. Note: GitHub may occasionally delay scheduled workflows by a few minutes under high load.
+Every 10 minutes via GitHub Actions cron. Trigger it manually anytime from the Actions tab. GitHub may delay scheduled runs a few minutes under high load.
 
-**Q: What if a post has errors?**
-The sync script logs detailed output. One failing post will not prevent other posts from syncing. Check the Actions run log for details.
+**Q: Do I need both databases?**
+No. Set only `NOTION_POSTS_DATABASE_ID` to run a posts-only blog (no home/pages sync). Set only `NOTION_PAGES_DATABASE_ID` for a site with no blog. Set both for the full experience.
+
+**Q: What if one page/post fails to sync?**
+The script logs detailed output and continues processing remaining items. One failure won't block others. Check the Actions run log for details.
 
 **Q: Are Notion image URLs permanent?**
-Notion-hosted file URLs expire after ~1 hour. For images in posts, use **external** image URLs (Unsplash, your own CDN, etc.) instead of uploading files directly to Notion. Set the `Cover Image` property to an external URL for reliable cover images.
+No — Notion-hosted file URLs expire after ~1 hour. Always use **external** image URLs (your own CDN, Unsplash, etc.) for `Profile Picture` and `Cover Image`.
 
-**Q: Can I use a custom Jekyll theme?**
-Yes. Replace the contents of `_layouts/`, `_includes/`, and `assets/css/main.css` with any Jekyll-compatible theme. The sync script only touches `_posts/`.
+**Q: How do I add a new custom section type (e.g. Photos)?**
+1. Add a new option to the `Type` select in your Notion Pages database (e.g. `photos`).
+2. Create `_layouts/photos.html`.
+3. Add a case to `typeToLayout()` in `scripts/sync-notion.js`.
+4. Style it in `assets/css/main.css`.
 
 **Q: Will GitHub Pages build correctly?**
-The theme uses only GitHub Pages–supported plugins (`jekyll-feed`, `jekyll-seo-tag`, `jekyll-sitemap`). No custom plugins that require `--safe` bypassing.
+Yes. The theme uses only GitHub Pages–safe plugins (`jekyll-feed`, `jekyll-seo-tag`, `jekyll-sitemap`) and standard Jekyll features — no custom plugins.
 
 ---
 
