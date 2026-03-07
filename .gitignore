@@ -24,7 +24,3 @@ Gemfile.lock
 # OS
 .DS_Store
 Thumbs.db
-
-# Posts & Pages
-_posts/*.md
-_pages/*.md
