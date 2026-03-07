@@ -316,6 +316,11 @@ function extractPageMeta(page) {
   const description = descProp?.rich_text?.[0]?.plain_text?.trim() ?? '';
 
   // Home-specific properties
+  // `Name` is the display name shown on the home page (separate from the page Title).
+  // If not set, falls back to the page Title.
+  const nameProp = props['Name'] ?? props['Display Name'] ?? props['Author Name'];
+  const displayName = nameProp?.rich_text?.[0]?.plain_text?.trim() || title;
+
   const picProp = props['Profile Picture'] ?? props['Avatar'] ?? props['Photo'];
   const profile_picture = picProp?.rich_text?.[0]?.plain_text?.trim() ?? '';
 
@@ -326,7 +331,7 @@ function extractPageMeta(page) {
   const socialRaw  = socialProp?.rich_text?.map((r) => r.plain_text).join('') ?? '';
   const social_links = parseSocialLinks(socialRaw);
 
-  return { title, slug, type, navOrder, showInNav, description, profile_picture, tagline, social_links };
+  return { title, displayName, slug, type, navOrder, showInNav, description, profile_picture, tagline, social_links };
 }
 
 /**
@@ -419,7 +424,7 @@ async function syncPages() {
         const blocks = await fetchAllBlocks(page.id);
         const bio    = blocksToMarkdown(blocks);
         homeData = {
-          name:            meta.title,
+          name:            meta.displayName,
           tagline:         meta.tagline,
           profile_picture: meta.profile_picture,
           social_links:    meta.social_links,

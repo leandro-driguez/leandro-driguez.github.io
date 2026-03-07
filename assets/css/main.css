@@ -6,8 +6,8 @@
 /* ─── Design tokens ──────────────────────────────────────────── */
 :root {
   /* Colors — light */
-  --bg:              #fafaf9;
-  --surface:         #ffffff;
+  --bg:              #f3f4f6;
+  --surface:         #f3f4f6;
   --text:            #18181b;
   --text-secondary:  #52525b;
   --text-muted:      #a1a1aa;
@@ -42,8 +42,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg:             #09090b;
-    --surface:        #18181b;
+    --bg:             #111111;
+    --surface:        #111111;
     --text:           #fafafa;
     --text-secondary: #d4d4d8;
     --text-muted:     #71717a;
@@ -54,6 +54,34 @@
     --code-text:      #e4e4e7;
     --tag-bg:         #27272a;
   }
+}
+
+[data-theme="dark"] {
+  --bg:             #111111;
+  --surface:        #111111;
+  --text:           #fafafa;
+  --text-secondary: #d4d4d8;
+  --text-muted:     #71717a;
+  --border:         #27272a;
+  --accent:         #60a5fa;
+  --accent-hover:   #93c5fd;
+  --code-bg:        #27272a;
+  --code-text:      #e4e4e7;
+  --tag-bg:         #27272a;
+}
+
+[data-theme="light"] {
+  --bg:              #f3f4f6;
+  --surface:         #f3f4f6;
+  --text:            #18181b;
+  --text-secondary:  #52525b;
+  --text-muted:      #a1a1aa;
+  --border:          #e4e4e7;
+  --accent:          #2563eb;
+  --accent-hover:    #1d4ed8;
+  --code-bg:         #f4f4f5;
+  --code-text:       #18181b;
+  --tag-bg:          #f4f4f5;
 }
 
 /* ─── Reset ──────────────────────────────────────────────────── */
@@ -107,17 +135,17 @@ img, video {
 
 /* ─── Header ─────────────────────────────────────────────────── */
 .site-header {
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--bg);
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
 .header-inner {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   height: 58px;
 }
 
@@ -141,7 +169,8 @@ img, video {
 }
 
 .site-nav a {
-  font-size: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 1rem;
   font-weight: 500;
   text-decoration: none;
   color: var(--text-secondary);
@@ -153,187 +182,136 @@ img, video {
   color: var(--text);
 }
 
+.theme-toggle {
+  position: absolute;
+  right: var(--s-6);
+  background: none;
+  border: none;
+  padding: var(--s-1);
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  transition: color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  color: var(--text);
+}
+
+/* Show moon in light mode, sun in dark mode */
+.icon-sun  { display: none; }
+.icon-moon { display: block; }
+
+@media (prefers-color-scheme: dark) {
+  .icon-sun  { display: block; }
+  .icon-moon { display: none; }
+}
+
+[data-theme="dark"]  .icon-sun  { display: block; }
+[data-theme="dark"]  .icon-moon { display: none; }
+[data-theme="light"] .icon-sun  { display: none; }
+[data-theme="light"] .icon-moon { display: block; }
+
 /* ─── Main ───────────────────────────────────────────────────── */
 .main {
   flex: 1;
   padding: var(--s-16) 0;
 }
 
-/* ─── Home hero ──────────────────────────────────────────────── */
-.home-hero {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: var(--s-16) 0 var(--s-8);
-  gap: var(--s-3);
+/* ─── Home page ──────────────────────────────────────────────────
+   default.html adds .home-body to <body> when layout == home.
+   This sets the gray background and turns .main into a centering
+   flex container — all other page layouts are unaffected.
+   ─────────────────────────────────────────────────────────────── */
+.home-body {
+  background: var(--bg);
 }
 
-.home-avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: var(--s-2);
-  border: 2px solid var(--border);
-  display: block;
-}
-
-.home-avatar-placeholder {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: var(--tag-bg);
-  border: 2px solid var(--border);
+.home-body .main {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  padding: var(--s-8) 0;
+}
+
+/* Centered content block */
+.home-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 var(--s-6);
+  width: 100%;
+  max-width: 520px;
+}
+
+.home-avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin-bottom: 2rem;
+}
+
+.home-avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
   font-weight: 700;
-  color: var(--text-secondary);
-  margin-bottom: var(--s-2);
-  letter-spacing: -0.02em;
+  color: #6b7280;
+  margin-bottom: 2rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .home-avatar-placeholder {
+    background: #374151;
+    color: #9ca3af;
+  }
 }
 
 .home-name {
-  font-size: 1.5rem;
+  font-family: 'Quicksand', var(--font-sans);
+  font-size: clamp(1.75rem, 6vw, 2.5rem);
   font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem;
   color: var(--text);
 }
 
 .home-tagline {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: var(--text-secondary);
-  line-height: 1.5;
-  margin: 0;
+  max-width: 28rem;
+  margin: 0 0 2.5rem;
+  line-height: 1.65;
 }
 
-.home-social {
+/* ─── Social icons (inside the content block) ────────────────── */
+.home-social-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.home-social-icons a {
+  color: var(--text-muted);
+  text-decoration: none;
   display: flex;
   align-items: center;
-  gap: var(--s-2);
-  flex-wrap: wrap;
-  margin-top: var(--s-1);
-}
-
-.home-social a {
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  text-decoration: none;
   transition: color 0.15s ease;
 }
 
-.home-social a:hover {
+.home-social-icons a:hover {
   color: var(--text);
-}
-
-.home-social-sep {
-  color: var(--border);
-  font-size: 0.75rem;
-  user-select: none;
-}
-
-/* ─── Home bio ───────────────────────────────────────────────── */
-.home-bio {
-  padding-top: var(--s-8);
-  border-top: 1px solid var(--border);
-  font-size: 0.95rem;
-  line-height: 1.8;
-  color: var(--text-secondary);
-}
-
-.home-bio > * + * {
-  margin-top: 1em;
-}
-
-.home-bio p {
-  margin: 0 0 1em;
-}
-
-.home-bio p:last-child {
-  margin-bottom: 0;
-}
-
-.home-bio a {
-  color: var(--accent);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-/* ─── Home recent posts ──────────────────────────────────────── */
-.home-posts {
-  margin-top: var(--s-12);
-  padding-top: var(--s-8);
-  border-top: 1px solid var(--border);
-}
-
-.home-posts-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: var(--s-4);
-}
-
-.home-posts-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.home-posts-more {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-.home-posts-more:hover {
-  color: var(--text);
-}
-
-.home-posts-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.home-post-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--s-4);
-  padding: var(--s-3) 0;
-  border-bottom: 1px solid var(--border);
-  text-decoration: none;
-  color: var(--text);
-  transition: color 0.15s ease;
-}
-
-.home-post-row:last-child {
-  border-bottom: none;
-}
-
-.home-post-row:hover {
-  color: var(--accent);
-}
-
-.home-post-title {
-  font-size: 0.95rem;
-  line-height: 1.4;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.home-post-date {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  white-space: nowrap;
-  flex-shrink: 0;
-  font-variant-numeric: tabular-nums;
 }
 
 /* ─── Blog list header ───────────────────────────────────────── */

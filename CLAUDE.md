@@ -30,13 +30,14 @@ The sync script runs as a scheduled GitHub Action every 10 minutes and commits a
 Controls the site structure. One row = one section/page of the site.
 
 Properties read by the sync script:
-- `Title` (Title) — page name and nav label
+- `Title` (Title) — page name used as the nav label and page heading
 - `Slug` (Text) — URL path, e.g. `about`, `blog`, `now`
 - `Type` (Select) — determines which Jekyll layout to use (see Page types below)
 - `Nav Order` (Number) — sort order in the header navbar
 - `Show in Nav` (Checkbox) — whether to include in the navbar
 - `Status` (Select) — must be `Published` to sync
 - `Description` (Text) — optional meta description
+- `Name` (Text) — display name shown on the home page (home type only); falls back to `Title` if not set
 - `Profile Picture` (Text) — external image URL, used by the `home` type
 - `Tagline` (Text) — one-liner bio, used by the `home` type
 - `Social Links` (Text) — newline-separated `Name: URL` pairs, used by the `home` type

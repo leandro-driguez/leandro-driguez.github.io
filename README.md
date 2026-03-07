@@ -40,6 +40,7 @@ Duplicate the Notion workspace template *(link)*, which gives you both databases
 | `Show in Nav` | Checkbox | Whether to appear in the header nav |
 | `Status` | Select | `Draft` or `Published` |
 | `Description` | Text | Optional meta description |
+| `Name` | Text | Your display name shown on the home page (home type only) |
 | `Profile Picture` | Text | External image URL — home page only |
 | `Tagline` | Text | One-line bio — home page only |
 | `Social Links` | Text | One `Name: URL` per line — home page only |

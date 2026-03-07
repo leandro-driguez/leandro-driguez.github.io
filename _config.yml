@@ -1,10 +1,10 @@
-title: "Your Name"
+title: "Leandro Rodriguez"
 description: "A personal site & blog, written in Notion."
 url: "https://username.github.io" # e.g. https://username.github.io
 baseurl: "" # e.g. /repo-name (leave empty if using username.github.io)
 
 author:
-  name: "Your Name"
+  name: "Leandro Rodriguez"
   email: "you@example.com"
 
 # ── Build settings ────────────────────────────────────────────────────────────
